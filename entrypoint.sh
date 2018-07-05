@@ -90,7 +90,7 @@ cat <<-EOF > /etc/v2ray/config.json
 EOF
 
 cat <<-EOF > /usr/local/caddy/Caddyfile
-${appname}.herokuapp.com:${PORT}
+localhost:${PORT}
 {
 	root /www
 	timeouts none
