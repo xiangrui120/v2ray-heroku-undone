@@ -1,34 +1,30 @@
 #! /bin/bash
 
-function check_time(){
-	rm -rf /etc/localtime
-	cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-	ntpdate time.nist.gov
-}
+rm -rf /etc/localtime
+cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+ntpdate time.nist.gov
 
-function install_v2ray_caddy(){
-	mkdir /etc/v2ray && cd /etc/v2ray
-	wget http://storage.googleapis.com/v2ray-docker/v2ray 
-	wget http://storage.googleapis.com/v2ray-docker/v2ctl
-	wget http://storage.googleapis.com/v2ray-docker/geoip.dat
-	wget http://storage.googleapis.com/v2ray-docker/geosite.dat
-	chmod +x v2ray
-	chmod +x v2ctl
-	cd /root
-	wget https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/caddy_install.sh && bash caddy_install.sh && rm -rf caddy_install.sh
-}
+mkdir /etc/v2ray && cd /etc/v2ray
+wget http://storage.googleapis.com/v2ray-docker/v2ray 
+wget http://storage.googleapis.com/v2ray-docker/v2ctl
+wget http://storage.googleapis.com/v2ray-docker/geoip.dat
+wget http://storage.googleapis.com/v2ray-docker/geosite.dat
+chmod +x v2ray
+chmod +x v2ctl
+cd /root
+wget https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/caddy_install.sh && bash caddy_install.sh && rm -rf caddy_install.sh
 
-function set_v2ray_caddy(){
-	if [[ -z "${UserUUID}" ]];then
-		UserUUID="c120a2df-c37b-4e73-b0cf-dd29946dabed"
-	fi
-	if [[ -z "${AlterID}" ]];then
-		AlterID="10"
-	fi
-	if [[ -z "${Path}" ]];then
-		Path="/letscrosschinagfw"
-	fi
-	cat <<-EOF > /etc/v2ray/config.json
+if [[ -z "${UserUUID}" ]];then
+	UserUUID="c120a2df-c37b-4e73-b0cf-dd29946dabed"
+fi
+if [[ -z "${AlterID}" ]];then
+	AlterID="10"
+fi
+if [[ -z "${Path}" ]];then
+	Path="/letscrosschinagfw"
+fi
+
+cat <<-EOF > /etc/v2ray/config.json
 {
     "inbound": {
 		"listen":"127.0.0.1",
@@ -91,8 +87,9 @@ function set_v2ray_caddy(){
         }
     }
 }
-	EOF
-	cat <<-EOF > /usr/local/caddy/Caddyfile
+EOF
+
+cat <<-EOF > /usr/local/caddy/Caddyfile
 localhost:${PORT}
 {
 	root /www
@@ -102,11 +99,9 @@ localhost:${PORT}
 		header_upstream -Origin
 	}
 }
-	EOF
-}
+EOF
 
-function set_webindex(){
-	cat <<-EOF > /www/index.html
+cat <<-EOF > /www/index.html
 <!DOCTYPE html>
 <html>
     <head>
@@ -151,18 +146,7 @@ function set_webindex(){
         </div>
     </body>
 </html>
-	EOF
-}
+EOF
 
-function restart_service(){
-	service caddy restart
-	/etc/v2ray/v2ray --config=/etc/v2ray/config.json&
-}
-	
-function main(){
-	check_time
-	install_v2ray_caddy
-	set_v2ray_caddy
-	set_webindex
-	restart_service
-}
+service caddy restart
+/etc/v2ray/v2ray --config=/etc/v2ray/config.json&
