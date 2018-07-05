@@ -7,6 +7,6 @@ RUN apt update -y \
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 CMD /entrypoint.sh
-RUN service v2ray status
 RUN cat /etc/v2ray/config.json
 RUN cat /usr/local/caddy/Caddyfile
+RUN service caddy status
