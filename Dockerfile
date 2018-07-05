@@ -4,8 +4,10 @@ RUN apt update -y \
 	&& apt upgrade -y \
 	&& apt install -y wget curl ntpdate unzip lsof cron
 
-RUN bash <(curl https://install.direct/go.sh)
-RUN	bash <(curl https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/caddy_install.sh)
+RUN	cd /root \
+	&& wget https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/caddy_install.sh \
+	&& bash caddy_install.sh \
+	&& rm -rf bash caddy_install.sh
 
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
