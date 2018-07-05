@@ -7,14 +7,10 @@ function check_time(){
 }
 
 function install_v2ray_caddy(){
-	mkdir /etc/v2ray && cd /etc/v2ray
-	wget http://storage.googleapis.com/v2ray-docker/v2ray 
-	wget http://storage.googleapis.com/v2ray-docker/v2ctl
-	wget http://storage.googleapis.com/v2ray-docker/geoip.dat
-	wget http://storage.googleapis.com/v2ray-docker/geosite.dat
-	chmod +x v2ray
-	chmod +x v2ctl
 	cd /root
+	wget https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/caddy_install.sh && bash caddy_install.sh && rm -rf caddy_install.sh
+	wget https://install.direct/go.sh && bash go.sh && rm -rf go.sh
+	
 }
 
 function set_v2ray_caddy(){
@@ -27,14 +23,14 @@ function set_v2ray_caddy(){
 	if [[ -z "${Path}" ]];then
 		Path="/letscrosschinagfw"
 	fi
-	echo -e "{\"inbound\":{\"listen\":\"127.0.0.1\",\"port\":10000,\"protocol\":\"vmess\",\"settings\":{\"udp\":true,\"clients\":[{\"id\":\"" > /etc/v2ray/config.json
-	echo -e -n "${UserUUID}" > /etc/v2ray/config.json
-	echo -e -n "\",                     \"alterId\": " > /etc/v2ray/config.json
-	echo -e -n "${AlterID}" > /etc/v2ray/config.json
-	echo -e -n "}]},\"streamSettings\":{\"network\":\"ws\",\"wsSettings\":{\"path\":\"" > /etc/v2ray/config.json
-	echo -e -n "${Path}" > /etc/v2ray/config.json
-	echo -e -n "\" 			}         }     },     \"outbound\": {         \"protocol\": \"freedom\",         \"settings\": {}     },     \"inboundDetour\": [],     \"outboundDetour\": [         {             \"protocol\": \"blackhole\",             \"settings\": {},             \"tag\": \"blocked\"         }     ],     \"routing\": {         \"strategy\": \"rules\",         \"settings\": {             \"rules\": [                 {                     \"type\": \"field\",                     \"ip\": [                         \"0.0.0.0/8\",                         \"10.0.0.0/8\",                         \"100.64.0.0/10\",                         \"127.0.0.0/8\",                         \"169.254.0.0/16\",                         \"172.16.0.0/12\",                         \"192.0.0.0/24\",                         \"192.0.2.0/24\",                         \"192.168.0.0/16\",                         \"198.18.0.0/15\",                         \"198.51.100.0/24\",                         \"203.0.113.0/24\",                         \"::1/128\",                         \"fc00::/7\",                         \"fe80::/10\"                     ],                     \"outboundTag\": \"blocked\"                 }             ]         }     } } " > /etc/v2ray/config.json
-	echo -e "localhost:${PORT}
+	echo -e -n "{\"inbound\":{\"listen\":\"127.0.0.1\",\"port\":10000,\"protocol\":\"vmess\",\"settings\":{\"udp\":true,\"clients\":[{\"id\":\"" > /etc/v2ray/config.json
+	echo -e -n "${UserUUID}" >> /etc/v2ray/config.json
+	echo -e -n "\",                     \"alterId\": " >> /etc/v2ray/config.json
+	echo -e -n "${AlterID}" >> /etc/v2ray/config.json
+	echo -e -n "}]},\"streamSettings\":{\"network\":\"ws\",\"wsSettings\":{\"path\":\"" >> /etc/v2ray/config.json
+	echo -e -n "${Path}" >> /etc/v2ray/config.json
+	echo -e -n "\" 			}         }     },     \"outbound\": {         \"protocol\": \"freedom\",         \"settings\": {}     },     \"inboundDetour\": [],     \"outboundDetour\": [         {             \"protocol\": \"blackhole\",             \"settings\": {},             \"tag\": \"blocked\"         }     ],     \"routing\": {         \"strategy\": \"rules\",         \"settings\": {             \"rules\": [                 {                     \"type\": \"field\",                     \"ip\": [                         \"0.0.0.0/8\",                         \"10.0.0.0/8\",                         \"100.64.0.0/10\",                         \"127.0.0.0/8\",                         \"169.254.0.0/16\",                         \"172.16.0.0/12\",                         \"192.0.0.0/24\",                         \"192.0.2.0/24\",                         \"192.168.0.0/16\",                         \"198.18.0.0/15\",                         \"198.51.100.0/24\",                         \"203.0.113.0/24\",                         \"::1/128\",                         \"fc00::/7\",                         \"fe80::/10\"                     ],                     \"outboundTag\": \"blocked\"                 }             ]         }     } } " >> /etc/v2ray/config.json
+	echo -e -n "localhost:${PORT}
 {
 	root /www
 	timeouts none
