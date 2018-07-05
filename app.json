@@ -1,0 +1,22 @@
+{
+  "name": "V2Ray easy to use",
+  "description": "Deploy V2Ray to Heroku.",
+  "keywords": ["V2Ray"],
+  "env": {
+    "UserUUID": {
+       "description": "Please enter your UserUUID:",
+       "value": "c120a2df-c37b-4e73-b0cf-dd29946dabed"
+     },
+    "AlterID": {
+       "description": "Please enter your AlterID:",
+       "value": "10"
+     },
+	"Path": {
+       "description": "Please enter your Path:",
+       "value": "/letscrosschinagfw"
+     }
+  },
+  "website": "https://github.com/wangyi2005/v2ray-heroku",
+  "repository": "https://github.com/wangyi2005/v2ray-heroku",
+  "stack": "container"
+ }
