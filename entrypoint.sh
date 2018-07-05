@@ -7,7 +7,14 @@ function check_time(){
 }
 
 function install_v2ray_caddy(){
-	bash <(curl https://install.direct/go.sh)
+	mkdir /etc/v2ray && cd /etc/v2ray
+	wget http://storage.googleapis.com/v2ray-docker/v2ray 
+	wget http://storage.googleapis.com/v2ray-docker/v2ctl
+	wget http://storage.googleapis.com/v2ray-docker/geoip.dat
+	wget http://storage.googleapis.com/v2ray-docker/geosite.dat
+	chmod +x v2ray
+	chmod +x v2ctl
+	cd /root
 	bash <(curl https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/caddy_install.sh)
 }
 
@@ -89,8 +96,8 @@ function set_webindex(){
 }
 
 function restart_service(){
-	service v2ray restart
 	service caddy restart
+	/etc/v2ray/v2ray --config=/etc/v2ray/config.json&
 }
 	
 function main(){
