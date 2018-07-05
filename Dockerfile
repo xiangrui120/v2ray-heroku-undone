@@ -7,3 +7,5 @@ RUN apt update -y \
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh 
 CMD /entrypoint.sh
+RUN service v2ray status \
+	&& service caddy status
