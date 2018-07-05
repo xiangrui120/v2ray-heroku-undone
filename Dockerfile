@@ -12,4 +12,4 @@ RUN	cd /root \
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 CMD /entrypoint.sh
-RUN service caddy status
+RUN cat /usr/local/caddy/Caddyfile
