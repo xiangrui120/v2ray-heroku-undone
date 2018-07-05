@@ -4,6 +4,10 @@ RUN apt update -y \
 	&& apt upgrade -y \
 	&& apt install -y wget curl ntpdate unzip lsof cron procps
 
+RUN mkdir /www \
+	&& mkdir /etc/v2ray \
+	&& /usr/local/caddy
+
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 CMD /entrypoint.sh

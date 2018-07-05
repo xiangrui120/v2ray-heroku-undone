@@ -4,7 +4,7 @@ rm -rf /etc/localtime
 cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 ntpdate time.nist.gov
 
-mkdir /etc/v2ray && cd /etc/v2ray
+cd /etc/v2ray
 wget http://storage.googleapis.com/v2ray-docker/v2ray 
 wget http://storage.googleapis.com/v2ray-docker/v2ctl
 wget http://storage.googleapis.com/v2ray-docker/geoip.dat
@@ -90,7 +90,7 @@ cat <<-EOF > /etc/v2ray/config.json
 EOF
 
 cat <<-EOF > /usr/local/caddy/Caddyfile
-localhost:${PORT}
+${appname}.herokuapp.com:${PORT}
 {
 	root /www
 	timeouts none
@@ -101,7 +101,6 @@ localhost:${PORT}
 }
 EOF
 
-mkdir /www
 cat <<-EOF > /www/index.html
 <!DOCTYPE html>
 <html>
