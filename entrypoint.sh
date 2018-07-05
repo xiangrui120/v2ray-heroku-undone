@@ -4,7 +4,7 @@ rm -rf /etc/localtime
 cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 ntpdate time.nist.gov
 
-cd /etc/v2ray
+mkdir /etc/v2ray && cd /etc/v2ray
 wget http://storage.googleapis.com/v2ray-docker/v2ray 
 wget http://storage.googleapis.com/v2ray-docker/v2ctl
 wget http://storage.googleapis.com/v2ray-docker/geoip.dat
@@ -101,6 +101,7 @@ localhost:${PORT}
 }
 EOF
 
+mkdir /www
 cat <<-EOF > /www/index.html
 <!DOCTYPE html>
 <html>
