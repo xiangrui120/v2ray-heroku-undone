@@ -12,7 +12,23 @@ wget http://storage.googleapis.com/v2ray-docker/geosite.dat
 chmod +x v2ray
 chmod +x v2ctl
 cd /root
-wget https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/caddy_install.sh && bash caddy_install.sh && rm -rf caddy_install.sh
+
+cd /etc/caddy
+if [[ $(uname -m) == "i386" ]]; then
+	wget -O "caddy_linux.tar.gz" "https://caddyserver.com/download/linux/386${extension_all}" && caddy_bit="caddy_linux_386"
+elif [[ $(uname -m) == "i686" ]]; then
+	wget -O "caddy_linux.tar.gz" "https://caddyserver.com/download/linux/386${extension_all}" && caddy_bit="caddy_linux_386"
+elif [[ $(uname -m) == "x86_64" ]]; then
+	wget -O "caddy_linux.tar.gz" "https://caddyserver.com/download/linux/amd64${extension_all}" && caddy_bit="caddy_linux_amd64"
+fi
+tar zxf "caddy_linux.tar.gz"
+rm -rf "caddy_linux.tar.gz"
+rm -rf LICENSES.txt
+rm -rf README.txt 
+rm -rf CHANGES.txt
+rm -rf "init/"
+chmod +x caddy
+cd /root
 
 if [[ -z "${UserUUID}" ]];then
 	UserUUID="c120a2df-c37b-4e73-b0cf-dd29946dabed"
@@ -89,7 +105,7 @@ cat <<-EOF > /etc/v2ray/config.json
 }
 EOF
 
-cat <<-EOF > /usr/local/caddy/Caddyfile
+cat <<-EOF > /etc/caddy/caddyfile
 :${PORT}
 {
 	root /www
@@ -149,4 +165,5 @@ cat <<-EOF > /www/index.html
 EOF
 
 service caddy restart
-/etc/v2ray/v2ray --config=/etc/v2ray/config.json&
+nohup "/etc/v2ray/v2ray" --config="/etc/v2ray/config.json" >> /tmp/v2ray.log 2>&1 &
+nohup "/etc/caddy/caddy" --conf="/etc/caddy/caddyfile" -agree >> /tmp/caddy.log 2>&1 &
