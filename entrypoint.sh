@@ -28,14 +28,72 @@ function set_v2ray_caddy(){
 	if [[ -z "${Path}" ]];then
 		Path="/letscrosschinagfw"
 	fi
-	echo -e "{\"inbound\":{\"listen\":\"127.0.0.1\",\"port\":10000,\"protocol\":\"vmess\",\"settings\":{\"udp\":true,\"clients\":[{\"id\":\"" > /etc/v2ray/config.json
-	echo -e -n "${UserUUID}" >> /etc/v2ray/config.json
-	echo -e -n "\",                     \"alterId\": " >> /etc/v2ray/config.json
-	echo -e -n "${AlterID}" >> /etc/v2ray/config.json
-	echo -e -n "}]},\"streamSettings\":{\"network\":\"ws\",\"wsSettings\":{\"path\":\"" >> /etc/v2ray/config.json
-	echo -e -n "${Path}" >> /etc/v2ray/config.json
-	echo -e -n "\" 			}         }     },     \"outbound\": {         \"protocol\": \"freedom\",         \"settings\": {}     },     \"inboundDetour\": [],     \"outboundDetour\": [         {             \"protocol\": \"blackhole\",             \"settings\": {},             \"tag\": \"blocked\"         }     ],     \"routing\": {         \"strategy\": \"rules\",         \"settings\": {             \"rules\": [                 {                     \"type\": \"field\",                     \"ip\": [                         \"0.0.0.0/8\",                         \"10.0.0.0/8\",                         \"100.64.0.0/10\",                         \"127.0.0.0/8\",                         \"169.254.0.0/16\",                         \"172.16.0.0/12\",                         \"192.0.0.0/24\",                         \"192.0.2.0/24\",                         \"192.168.0.0/16\",                         \"198.18.0.0/15\",                         \"198.51.100.0/24\",                         \"203.0.113.0/24\",                         \"::1/128\",                         \"fc00::/7\",                         \"fe80::/10\"                     ],                     \"outboundTag\": \"blocked\"                 }             ]         }     } } " >> /etc/v2ray/config.json
-	echo -e "localhost:${PORT}
+	cat <<-EOF > /etc/v2ray/config.json
+{
+    "inbound": {
+		"listen":"127.0.0.1",
+        "port": 10000,
+        "protocol": "vmess",
+        "settings": {
+			"udp": true,
+            "clients": [
+                {
+                    "id": "${UserUUID}",
+                    "alterId": ${AlterID}
+                }
+            ]
+		},
+		"streamSettings": {
+			"network":"ws",
+            "wsSettings":{
+				"path":"${Path}"
+			}
+        }
+    },
+    "outbound": {
+        "protocol": "freedom",
+        "settings": {}
+    },
+    "inboundDetour": [],
+    "outboundDetour": [
+        {
+            "protocol": "blackhole",
+            "settings": {},
+            "tag": "blocked"
+        }
+    ],
+    "routing": {
+        "strategy": "rules",
+        "settings": {
+            "rules": [
+                {
+                    "type": "field",
+                    "ip": [
+                        "0.0.0.0/8",
+                        "10.0.0.0/8",
+                        "100.64.0.0/10",
+                        "127.0.0.0/8",
+                        "169.254.0.0/16",
+                        "172.16.0.0/12",
+                        "192.0.0.0/24",
+                        "192.0.2.0/24",
+                        "192.168.0.0/16",
+                        "198.18.0.0/15",
+                        "198.51.100.0/24",
+                        "203.0.113.0/24",
+                        "::1/128",
+                        "fc00::/7",
+                        "fe80::/10"
+                    ],
+                    "outboundTag": "blocked"
+                }
+            ]
+        }
+    }
+}
+	EOF
+	cat <<-EOF > /usr/local/caddy/Caddyfile
+localhost:${PORT}
 {
 	root /www
 	timeouts none
@@ -43,7 +101,8 @@ function set_v2ray_caddy(){
 		websocket
 		header_upstream -Origin
 	}
-}" > /usr/local/caddy/Caddyfile
+}
+	EOF
 }
 
 function set_webindex(){
