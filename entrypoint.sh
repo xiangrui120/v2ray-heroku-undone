@@ -1,169 +1,135 @@
 #! /bin/bash
+if [[ -z "${UUID}" ]];then
+  UUID="4890bd47-5180-4b1c-9a5d-3ef686543112"
+fi
+
+if [[ -z "${AlterID}" ]];then
+  AlterID="10"
+fi
+
+if [[ -z "${V2_Path}" ]];then
+  V2_Path="/FreeApp"
+fi
+
+if [[ -z "${V2_QR_Path}" ]];then
+  V2_QR_Code="1234"
+fi
 
 rm -rf /etc/localtime
-cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-ntpdate time.nist.gov
+ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+ntpdate us.pool.ntp.org
+date -R
 
-cd /etc/v2ray
-wget http://storage.googleapis.com/v2ray-docker/v2ray 
-wget http://storage.googleapis.com/v2ray-docker/v2ctl
-wget http://storage.googleapis.com/v2ray-docker/geoip.dat
-wget http://storage.googleapis.com/v2ray-docker/geosite.dat
+SYS_Bit="$(getconf LONG_BIT)"
+[[ "$SYS_Bit" == '32' ]] && BitVer='_linux_386.tar.gz'
+[[ "$SYS_Bit" == '64' ]] && BitVer='_linux_amd64.tar.gz'
+
+if [ "$VER" = "latest" ]; then
+  V2_TAG_URL="https://api.github.com/repos/v2ray/v2ray-core/releases/latest"
+  VER_1=`wget -qO- "$V2_TAG_URL" | grep 'tag_name' | cut -d\" -f4`
+else
+  VER_1="v$VER"
+fi
+
+mkdir /v2raybin
+cd /v2raybin
+wget --no-check-certificate -qO 'v2ray.zip' "https://github.com/v2ray/v2ray-core/releases/download/$VER_1/v2ray-linux-$SYS_Bit.zip"
+unzip v2ray.zip
+cd /v2raybin/v2ray-$VER_1-linux-$SYS_Bit
 chmod +x v2ray
 chmod +x v2ctl
-cd /root
+rm -rf v2ray.zip
 
-cd /etc/caddy
-if [[ $(uname -m) == "i386" ]]; then
-	wget -O "caddy_linux.tar.gz" "https://caddyserver.com/download/linux/386${extension_all}" && caddy_bit="caddy_linux_386"
-elif [[ $(uname -m) == "i686" ]]; then
-	wget -O "caddy_linux.tar.gz" "https://caddyserver.com/download/linux/386${extension_all}" && caddy_bit="caddy_linux_386"
-elif [[ $(uname -m) == "x86_64" ]]; then
-	wget -O "caddy_linux.tar.gz" "https://caddyserver.com/download/linux/amd64${extension_all}" && caddy_bit="caddy_linux_amd64"
-fi
-tar zxf "caddy_linux.tar.gz"
-rm -rf "caddy_linux.tar.gz"
-rm -rf LICENSES.txt
-rm -rf README.txt 
-rm -rf CHANGES.txt
-rm -rf "init/"
+CADDY_TAG_URL="https://api.github.com/repos/mholt/caddy/releases/latest"
+CADDY_VER=`wget -qO- "$CADDY_TAG_URL" | grep 'tag_name' | cut -d\" -f4`
+mkdir /caddybin
+mkdir /caddybin/caddy_$CADDY_VER
+cd /caddybin/caddy_$CADDY_VER
+wget --no-check-certificate -qO 'caddy.tar.gz' "https://github.com/mholt/caddy/releases/download/$CADDY_VER/caddy_$CADDY_VER$BitVer"
+tar xvf caddy.tar.gz
 chmod +x caddy
+rm -rf caddy.tar.gz
 cd /root
+mkdir /wwwroot
+cd /wwwroot
 
-if [[ -z "${UserUUID}" ]];then
-	UserUUID="c120a2df-c37b-4e73-b0cf-dd29946dabed"
-fi
-if [[ -z "${AlterID}" ]];then
-	AlterID="10"
-fi
-if [[ -z "${Path}" ]];then
-	Path="/letscrosschinagfw"
-fi
+wget --no-check-certificate -qO 'demo.tar.gz' "https://github.com/ki8852/v2ray-heroku-undone/raw/master/demo.tar.gz"
+tar xvf demo.tar.gz
+rm -rf demo.tar.gz
 
-cat <<-EOF > /etc/v2ray/config.json
+cat <<-EOF > /v2raybin/v2ray-$VER_1-linux-$SYS_Bit/config.json
 {
-    "inbound": {
+    "log":{
+        "loglevel":"warning"
+    },
+    "inbound":{
+        "protocol":"vmess",
         "listen":"127.0.0.1",
-        "port": 10000,
-        "protocol": "vmess",
-        "settings": {
-			"udp": true,
-            "clients": [
+        "port":2333,
+        "settings":{
+            "clients":[
                 {
-                    "id": "${UserUUID}",
-                    "alterId": ${AlterID}
+                    "id":"${UUID}",
+                    "level":1,
+                    "alterId":${AlterID}
                 }
             ]
-		},
-		"streamSettings": {
-			"network":"ws",
+        },
+        "streamSettings":{
+            "network":"ws",
             "wsSettings":{
-				"path":"${Path}"
-			}
+                "path":"${V2_Path}"
+            }
         }
     },
-    "outbound": {
-        "protocol": "freedom",
-        "settings": {}
-    },
-    "inboundDetour": [],
-    "outboundDetour": [
-        {
-            "protocol": "blackhole",
-            "settings": {},
-            "tag": "blocked"
-        }
-    ],
-    "routing": {
-        "strategy": "rules",
-        "settings": {
-            "rules": [
-                {
-                    "type": "field",
-                    "ip": [
-                        "0.0.0.0/8",
-                        "10.0.0.0/8",
-                        "100.64.0.0/10",
-                        "127.0.0.0/8",
-                        "169.254.0.0/16",
-                        "172.16.0.0/12",
-                        "192.0.0.0/24",
-                        "192.0.2.0/24",
-                        "192.168.0.0/16",
-                        "198.18.0.0/15",
-                        "198.51.100.0/24",
-                        "203.0.113.0/24",
-                        "::1/128",
-                        "fc00::/7",
-                        "fe80::/10"
-                    ],
-                    "outboundTag": "blocked"
-                }
-            ]
+    "outbound":{
+        "protocol":"freedom",
+        "settings":{
         }
     }
 }
 EOF
 
-cat <<-EOF > /etc/caddy/caddyfile
-:${PORT}
+cat <<-EOF > /caddybin/caddy_$CADDY_VER/Caddyfile
+http://0.0.0.0:${PORT}
 {
-	root /www
+	root /wwwroot
+	index index.html
 	timeouts none
-	proxy ${Path} localhost:10000 {
+	proxy ${V2_Path} localhost:2333 {
 		websocket
 		header_upstream -Origin
 	}
 }
 EOF
 
-cat <<-EOF > /www/index.html
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>WorldCDN - Designed by World.Team - herokuapp.com</title>
-        <link rel="stylesheet" href="https://fonts.cat.net/css?family=Roboto:300">
-        <style>
-            html, body {
-                height: 100%;
-            }
-            body {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                display: table;
-                font-weight: 100;
-                font-family: "Roboto",sans-serif;
-            }
-            .container {
-                text-align: center;
-                display: table-cell;
-                vertical-align: middle;
-            }
-            .content {
-                text-align: center;
-                display: inline-block;
-            }
-            .title {
-                font-size: 96px;
-            }
-            .textcontent {
-                font-size: 50px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="content">
-                <div class="title">WorldCDN for Video</div>
-				<br />
-				<div class="textcontent">Designed by World.Team</div>
-            </div>
-        </div>
-    </body>
-</html>
+cat <<-EOF > /v2raybin/vmess.json 
+{
+    "v": "2",
+    "ps": "${AppName}.herokuapp.com",
+    "add": "${AppName}.herokuapp.com",
+    "port": "443",
+    "id": "${UUID}",
+    "aid": "${AlterID}",			
+    "net": "ws",			
+    "type": "none",			
+    "host": "",			
+    "path": "${V2_Path}",	
+    "tls": "tls"			
+}
 EOF
 
-service caddy restart
-nohup "/etc/v2ray/v2ray" --config="/etc/v2ray/config.json" >> /tmp/v2ray.log 2>&1 &
-nohup "/etc/caddy/caddy" --conf="/etc/caddy/caddyfile" -agree >> /tmp/caddy.log 2>&1 &
+if [ "$AppName" = "no" ]; then
+  echo "不生成二维码"
+else
+  mkdir /wwwroot/$V2_QR_Path
+  vmess="vmess://$(cat /v2raybin/vmess.json | base64 -w 0)" 
+  Linkbase64=$(echo -n "${vmess}" | tr -d '\n' | base64 -w 0) 
+  echo "${Linkbase64}" | tr -d '\n' > /wwwroot/$V2_QR_Path/index.html
+  echo -n "${vmess}" | qrencode -s 6 -o /wwwroot/$V2_QR_Path/v2.png
+fi
+
+cd /v2raybin/v2ray-$VER_1-linux-$SYS_Bit
+./v2ray &
+cd /caddybin/caddy_$CADDY_VER
+./caddy -conf="Caddyfile"
