@@ -4,7 +4,7 @@
   "keywords": ["V2ray"],
   "env": {
     "AppName": {
-       "description": "请输入最上方填写的App Name，用于生成订阅链接和配置文件，如果不想生成输入no！",
+       "description": "请输入最上方填写的App Name，用于生成二维码和订阅链接，如果不想生成输入no！",
        "value": "no"
      },
     "VER": {
