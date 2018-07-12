@@ -1,24 +1,29 @@
 #! /bin/bash
-if [[ -z "${UUID}" ]];then
+if [[ -z "${UUID}" ]]; then
   UUID="4890bd47-5180-4b1c-9a5d-3ef686543112"
 fi
 
-if [[ -z "${AlterID}" ]];then
+if [[ -z "${AlterID}" ]]; then
   AlterID="10"
 fi
 
-if [[ -z "${V2_Path}" ]];then
+if [[ -z "${V2_Path}" ]]; then
   V2_Path="/FreeApp"
 fi
 
-if [[ -z "${V2_QR_Path}" ]];then
+if [[ -z "${V2_QR_Path}" ]]; then
   V2_QR_Code="1234"
 fi
 
 rm -rf /etc/localtime
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-ntpdate us.pool.ntp.org
 date -R
+
+if [ ! -d /v2raybin ]; then
+  echo "文件夹不存在"
+else
+  echo "v2ray"
+fi
 
 SYS_Bit="$(getconf LONG_BIT)"
 [[ "$SYS_Bit" == '32' ]] && BitVer='_linux_386.tar.gz'
