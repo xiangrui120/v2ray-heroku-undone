@@ -19,12 +19,6 @@ rm -rf /etc/localtime
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 date -R
 
-if [ ! -d /v2raybin ]; then
-  echo "文件夹不存在"
-else
-  echo "v2ray"
-fi
-
 SYS_Bit="$(getconf LONG_BIT)"
 [[ "$SYS_Bit" == '32' ]] && BitVer='_linux_386.tar.gz'
 [[ "$SYS_Bit" == '64' ]] && BitVer='_linux_amd64.tar.gz'
@@ -40,20 +34,17 @@ mkdir /v2raybin
 cd /v2raybin
 wget --no-check-certificate -qO 'v2ray.zip' "https://github.com/v2ray/v2ray-core/releases/download/$VER_1/v2ray-linux-$SYS_Bit.zip"
 unzip v2ray.zip
-cd /v2raybin/v2ray-$VER_1-linux-$SYS_Bit
-chmod +x v2ray
-chmod +x v2ctl
 rm -rf v2ray.zip
+chmod +x /v2raybin/v2ray-$VER_1-linux-$SYS_Bit/*
 
 CADDY_TAG_URL="https://api.github.com/repos/mholt/caddy/releases/latest"
 CADDY_VER=`wget -qO- "$CADDY_TAG_URL" | grep 'tag_name' | cut -d\" -f4`
 mkdir /caddybin
-mkdir /caddybin/caddy_$CADDY_VER
-cd /caddybin/caddy_$CADDY_VER
+cd /caddybin
 wget --no-check-certificate -qO 'caddy.tar.gz' "https://github.com/mholt/caddy/releases/download/$CADDY_VER/caddy_$CADDY_VER$BitVer"
 tar xvf caddy.tar.gz
-chmod +x caddy
 rm -rf caddy.tar.gz
+chmod +x caddy
 cd /root
 mkdir /wwwroot
 cd /wwwroot
@@ -95,7 +86,7 @@ cat <<-EOF > /v2raybin/v2ray-$VER_1-linux-$SYS_Bit/config.json
 }
 EOF
 
-cat <<-EOF > /caddybin/caddy_$CADDY_VER/Caddyfile
+cat <<-EOF > /caddybin/Caddyfile
 http://0.0.0.0:${PORT}
 {
 	root /wwwroot
@@ -136,5 +127,5 @@ fi
 
 cd /v2raybin/v2ray-$VER_1-linux-$SYS_Bit
 ./v2ray &
-cd /caddybin/caddy_$CADDY_VER
+cd /caddybin
 ./caddy -conf="Caddyfile"
