@@ -24,24 +24,22 @@ SYS_Bit="$(getconf LONG_BIT)"
 [[ "$SYS_Bit" == '64' ]] && BitVer='_linux_amd64.tar.gz'
 
 if [ "$VER" = "latest" ]; then
-  V2_TAG_URL="https://api.github.com/repos/v2ray/v2ray-core/releases/latest"
-  VER_1=`wget -qO- "$V2_TAG_URL" | grep 'tag_name' | cut -d\" -f4`
+  V_VER=`wget -qO- "https://api.github.com/repos/v2ray/v2ray-core/releases/latest" | grep 'tag_name' | cut -d\" -f4`
 else
-  VER_1="v$VER"
+  V_VER="v$VER"
 fi
 
 mkdir /v2raybin
 cd /v2raybin
-wget --no-check-certificate -qO 'v2ray.zip' "https://github.com/v2ray/v2ray-core/releases/download/$VER_1/v2ray-linux-$SYS_Bit.zip"
+wget --no-check-certificate -qO 'v2ray.zip' "https://github.com/v2ray/v2ray-core/releases/download/$V_VER/v2ray-linux-$SYS_Bit.zip"
 unzip v2ray.zip
 rm -rf v2ray.zip
-chmod +x /v2raybin/v2ray-$VER_1-linux-$SYS_Bit/*
+chmod +x /v2raybin/v2ray-$V_VER-linux-$SYS_Bit/*
 
-CADDY_TAG_URL="https://api.github.com/repos/mholt/caddy/releases/latest"
-CADDY_VER=`wget -qO- "$CADDY_TAG_URL" | grep 'tag_name' | cut -d\" -f4`
+C_VER=`wget -qO- "https://api.github.com/repos/mholt/caddy/releases/latest" | grep 'tag_name' | cut -d\" -f4`
 mkdir /caddybin
 cd /caddybin
-wget --no-check-certificate -qO 'caddy.tar.gz' "https://github.com/mholt/caddy/releases/download/$CADDY_VER/caddy_$CADDY_VER$BitVer"
+wget --no-check-certificate -qO 'caddy.tar.gz' "https://github.com/mholt/caddy/releases/download/$C_VER/caddy_$C_VER$BitVer"
 tar xvf caddy.tar.gz
 rm -rf caddy.tar.gz
 chmod +x caddy
@@ -53,7 +51,7 @@ wget --no-check-certificate -qO 'demo.tar.gz' "https://github.com/ki8852/v2ray-h
 tar xvf demo.tar.gz
 rm -rf demo.tar.gz
 
-cat <<-EOF > /v2raybin/v2ray-$VER_1-linux-$SYS_Bit/config.json
+cat <<-EOF > /v2raybin/v2ray-$V_VER-linux-$SYS_Bit/config.json
 {
     "log":{
         "loglevel":"warning"
@@ -125,7 +123,7 @@ else
   echo -n "${vmess}" | qrencode -s 6 -o /wwwroot/$V2_QR_Path/v2.png
 fi
 
-cd /v2raybin/v2ray-$VER_1-linux-$SYS_Bit
+cd /v2raybin/v2ray-$V_VER-linux-$SYS_Bit
 ./v2ray &
 cd /caddybin
 ./caddy -conf="Caddyfile"
