@@ -100,10 +100,9 @@ EOF
 cat <<-EOF > /caddybin/Caddyfile
 http://0.0.0.0:${PORT}
 {
+  gzip
 	timeouts none
-  proxy / ${Anti_Proxy_Path} {
-    gzip
-  }
+  proxy / ${Anti_Proxy_Path} 
 	proxy ${V2_Path} localhost:2333 {
 		websocket
     without ${V2_Path}
