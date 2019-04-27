@@ -107,6 +107,7 @@ cat <<-EOF > /v2ray/config.json
 }
 EOF
 
+echo "伺服端口:${PORT}"
 cat <<-EOF > /caddybin/Caddyfile
 :${PORT} {
   gzip
