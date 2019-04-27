@@ -1,4 +1,4 @@
-#! /bin/bash -v
+#! /bin/bash
 if [[ -z "${AppName}" ]]; then
   echo "应用名未填!程序运行失败,退出"
   exit 1
@@ -47,7 +47,7 @@ fi
 mkdir /v2ray
 cd /v2ray
 wget --no-check-certificate -qO 'v2ray.zip' "https://github.com/v2ray/v2ray-core/releases/download/$V_VER/v2ray-linux-$SYS_Bit.zip"
-unzip v2ray.zip
+unzip -q v2ray.zip
 rm -rf v2ray.zip
 chmod +x /v2ray/*
 
@@ -55,9 +55,9 @@ C_VER=`wget -qO- "https://api.github.com/repos/mholt/caddy/releases/latest" | gr
 mkdir /caddybin
 cd /caddybin
 wget --no-check-certificate -qO 'caddy.tar.gz' "https://github.com/mholt/caddy/releases/download/$C_VER/caddy_$C_VER$BitVer"
-tar xvf caddy.tar.gz
+tar qxvf caddy.tar.gz
 rm -rf caddy.tar.gz
-chmod +x caddy
+chmod +x /caddybin/*
 # cd /root
 # mkdir /wwwroot
 # cd /wwwroot
@@ -69,7 +69,7 @@ chmod +x caddy
 cat <<-EOF > /v2ray/config.json
 {
     "log":{
-        "loglevel":"warning"
+        "loglevel":"info"
     },
     "inbound":{
         "protocol":"vmess",
@@ -100,14 +100,12 @@ cat <<-EOF > /v2ray/config.json
 EOF
 
 cat <<-EOF > /caddybin/Caddyfile
-http://0.0.0.0:${PORT}
-{
+:${PORT} {
   gzip
 	timeouts none
   proxy / ${Anti_Proxy_Path} 
-	proxy ${V2_Path} localhost:2333 {
+	proxy ${V2_Path} 127.0.0.1:2333 {
 		websocket
-    without ${V2_Path}
 		header_upstream -Origin
 	}
 }
@@ -120,12 +118,12 @@ cat <<-EOF > /v2ray/vmess.json
     "add": "${AppName}.herokuapp.com",
     "port": "443",
     "id": "${UUID}",
-    "aid": "${AlterID}",			
-    "net": "ws",			
-    "type": "none",			
-    "host": "",			
-    "path": "${V2_Path}",	
-    "tls": "tls"			
+    "aid": "${AlterID}",
+    "net": "ws",
+    "type": "none",
+    "host": "${AppName}.herokuapp.com",		
+    "path": "${V2_Path}",
+    "tls": "tls"
 }
 EOF
 
