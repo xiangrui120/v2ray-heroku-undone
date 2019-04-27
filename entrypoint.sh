@@ -144,4 +144,4 @@ echo "您的Vmess链接是:${vmess}"
 # echo -n "${vmess}" | qrencode -s 6 -o /wwwroot/$V2_QR_Path/v2.png
 
 /v2ray/v2ray &
-/caddybin/caddy -conf="Caddyfile"
+/caddybin/caddy -conf="/caddybin/Caddyfile"
