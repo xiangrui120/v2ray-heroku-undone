@@ -1,26 +1,32 @@
 #! /bin/bash -v
+if [[ -z "${AppName}" ]]; then
+  echo "应用名未填!程序运行失败,退出"
+  exit 1
+fi
+
 if [[ -z "${UUID}" ]]; then
-  UUID="4890bd47-5180-4b1c-9a5d-3ef686543112"
-  echo "UUID未填,将采用默认UUID${UUID}"
+  UUID="$(cat /proc/sys/kernel/random/uuid)"
+  echo "UUID未填,将采用随机UUID${UUID}"
 fi
 
 if [[ -z "${AlterID}" ]]; then
-  AlterID="10"
+  AlterID="16"
   echo "AlterID未填,将采用默认AlterID${AlterID}"
 fi
 
 if [[ "${V2_Path}" == '/' ]];then
-  V2_Path="/FreeApp"
+  V2_Path="/FreeV2"
   echo "路径不能为根路径,将采用默认路径${V2_Path}"
 fi
 
 if [[ -z "${V2_Path}" ]]; then
-  V2_Path="/FreeApp"
+  V2_Path="/FreeV2"
   echo "V2路径未填,将采用默认路径${V2_Path}"
 fi
 
 if [[ -z "${Anti_Proxy_Path}" ]]; then
   Anti_Proxy_Path="https://www.baidu.com"
+  echo "反代理路径未填,将采用默认路径${Anti_Proxy_Path}"
 fi
 
 rm -rf /etc/localtime
@@ -123,15 +129,12 @@ cat <<-EOF > /v2ray/vmess.json
 }
 EOF
 
-if [ "$AppName" = "no" ]; then
-  echo "不生成二维码"
-else
-  mkdir /wwwroot/$V2_QR_Path
-  vmess="vmess://$(cat /v2raybin/vmess.json | base64 -w 0)" 
-  Linkbase64=$(echo -n "${vmess}" | tr -d '\n' | base64 -w 0) 
-  echo "${Linkbase64}" | tr -d '\n' > /wwwroot/$V2_QR_Path/index.html
-  echo -n "${vmess}" | qrencode -s 6 -o /wwwroot/$V2_QR_Path/v2.png
-fi
+
+vmess="vmess://$(cat /v2ray/vmess.json | base64 -w 0)" 
+echo "您的Vmess链接是:${vmess}"
+# Linkbase64=$(echo -n "${vmess}" | tr -d '\n' | base64 -w 0) 
+# echo "${Linkbase64}" | tr -d '\n' > /wwwroot/$V2_QR_Path/index.html
+# echo -n "${vmess}" | qrencode -s 6 -o /wwwroot/$V2_QR_Path/v2.png
 
 cd /v2raybin/v2ray-$V_VER-linux-$SYS_Bit
 ./v2ray &

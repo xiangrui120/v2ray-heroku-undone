@@ -6,28 +6,28 @@
   ],
   "env": {
     "AppName": {
-      "description": "请输入最上方填写的App Name，用于生成二维码和订阅链接，如果不想生成输入no",
-      "value": "no"
+      "description": "请输入最上方填写的App Name，用于订阅链接,必填!",
+      "value": ""
     },
     "VER": {
       "description": "默认latest安装最新版本V2Ray （输入V2Ray 版本号 进行指定版本安装。例如：3.22)",
       "value": "latest"
     },
     "UUID": {
-      "description": "Vmess协议默认UUID，请输入自己的UUID",
-      "value": "4890bd47-5180-4b1c-9a5d-3ef686543112"
+      "description": "请输入自己的UUID,如无程序会自动随机一份",
+      "value": ""
     },
     "AlterID": {
-      "description": "AlterID大小，推荐10，数值越大内存占用越高",
-      "value": "10"
+      "description": "AlterID大小，推荐16，数值越大内存占用越高",
+      "value": "16"
     },
     "V2_Path": {
       "description": "Path路径，默认/FreeApp",
       "value": "/FreeApp"
     },
     "V2RAY_RAY_BUFFER_SIZE": {
-      "description": "每个连接的缓存大小，单位MB，默认10。如果感觉有断流现象，请考虑将缓存改成1",
-      "value": "10"
+      "description": "每个连接的缓存大小，单位MB，默认8。如果感觉有断流现象，请考虑将缓存改成1",
+      "value": "8"
     },
     "Anti_Proxy_Path": {
       "description": "反代理的网站地址",
