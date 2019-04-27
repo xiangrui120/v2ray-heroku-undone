@@ -25,10 +25,6 @@
       "description": "Path路径，默认/FreeApp",
       "value": "/FreeApp"
     },
-    "V2_QR_Path": {
-      "description": "二维码和订阅地址路径，默认1234。如AppName变量为no，此变量没有作用",
-      "value": "1234"
-    },
     "V2RAY_RAY_BUFFER_SIZE": {
       "description": "每个连接的缓存大小，单位MB，默认10。如果感觉有断流现象，请考虑将缓存改成1",
       "value": "10"

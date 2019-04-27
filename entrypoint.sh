@@ -19,10 +19,6 @@ if [[ -z "${V2_Path}" ]]; then
   echo "V2路径未填,将采用默认路径${V2_Path}"
 fi
 
-if [[ -z "${V2_QR_Path}" ]]; then
-  V2_QR_Code="1234"
-fi
-
 if [[ -z "${Anti_Proxy_Path}" ]]; then
   Anti_Proxy_Path="https://www.baidu.com"
 fi
@@ -42,8 +38,8 @@ else
   V_VER="v$VER"
 fi
 
-mkdir /v2raybin
-cd /v2raybin
+mkdir /v2ray
+cd /v2ray
 wget --no-check-certificate -qO 'v2ray.zip' "https://github.com/v2ray/v2ray-core/releases/download/$V_VER/v2ray-linux-$SYS_Bit.zip"
 unzip v2ray.zip
 rm -rf v2ray.zip
