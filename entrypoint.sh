@@ -4,6 +4,16 @@ if [[ -z "${AppName}" ]]; then
   exit 1
 fi
 
+if [[ -z "${Subcribe_Address}" ]]; then
+  echo "订阅地址未填!将不使用订阅地址!"
+  Subcribe_Address=""
+fi
+
+if [[ "${Subcribe_Address}" == "/" ]];then
+  echo "订阅路径不能为根路径,将不使用订阅地址"
+  Subcribe_Address=""
+fi
+
 if [[ -z "${UUID}" ]]; then
   UUID="$(cat /proc/sys/kernel/random/uuid)"
   echo "UUID未填,将采用随机UUID${UUID}"
@@ -37,7 +47,7 @@ date -R
 SYS_Bit="$(getconf LONG_BIT)"
 [[ "$SYS_Bit" == '32' ]] && BitVer='_linux_386.tar.gz'
 [[ "$SYS_Bit" == '64' ]] && BitVer='_linux_amd64.tar.gz'
-echo "您正在使用${SYS_Bit}位系统!"
+echo "判断为${SYS_Bit}位系统"
 
 echo "正在获取V2ray"
 if [ "$VER" = "latest" ]; then
@@ -77,12 +87,12 @@ echo "开始写入配置文件"
 cat <<-EOF > /v2ray/config.json
 {
     "log":{
-        "loglevel":"info"
+        "loglevel":"warning"
     },
     "inbound":{
         "protocol":"vmess",
         "listen":"127.0.0.1",
-        "port":2333,
+        "port":25617,
         "settings":{
             "clients":[
                 {
@@ -111,9 +121,10 @@ echo "伺服端口:${PORT}"
 cat <<-EOF > /caddybin/Caddyfile
 :${PORT} {
   gzip
+  log stdout
 	timeouts none
   proxy / ${Anti_Proxy_Path} 
-	proxy ${V2_Path} 127.0.0.1:2333 {
+	proxy ${V2_Path} 127.0.0.1:25617 {
 		websocket
 		header_upstream -Origin
 	}
@@ -136,7 +147,7 @@ cat <<-EOF > /v2ray/vmess.json
 }
 EOF
 
-echo "程序配置完成(大概)"
+echo "程序已经运行"
 
 vmess="vmess://$(cat /v2ray/vmess.json | base64 -w 0)" 
 echo "您的Vmess链接是:${vmess}"

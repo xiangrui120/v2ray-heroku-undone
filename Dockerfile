@@ -1,6 +1,5 @@
 FROM debian:sid
 
-#RUN bash [[ -z ${AppName}]] && exit 1
 RUN apt update -y \
     	&& apt upgrade -y \
     	&& apt install -y wget unzip qrencode

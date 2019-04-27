@@ -1,5 +1,5 @@
 {
-  "name": "V2ray简易部署",
+  "name": "V2ray-Heroku部署",
   "description": "Deploy V2ray to Heroku.",
   "keywords": [
     "V2ray"
@@ -9,21 +9,29 @@
       "description": "请输入最上方填写的App Name，用于订阅链接,必填!",
       "value": ""
     },
+    "Subcribe_Address": {
+      "description": "请输入查看订阅的地址，留空则不使用",
+      "value": "/subcribe",
+      "required": false
+    },
     "VER": {
       "description": "默认latest安装最新版本V2Ray （输入V2Ray 版本号 进行指定版本安装。例如：3.22)",
       "value": "latest"
     },
     "UUID": {
       "description": "请输入自己的UUID,如无程序会自动随机一份",
-      "value": ""
+      "value": "",
+      "required": false
     },
     "AlterID": {
       "description": "AlterID大小，推荐16，数值越大内存占用越高",
-      "value": "16"
+      "value": "16",
+      "required": false
     },
     "V2_Path": {
-      "description": "Path路径，默认/FreeApp",
-      "value": "/FreeApp"
+      "description": "Path路径，默认/FreeV2",
+      "value": "/FreeV2",
+      "required": false
     },
     "V2RAY_RAY_BUFFER_SIZE": {
       "description": "每个连接的缓存大小，单位MB，默认8。如果感觉有断流现象，请考虑将缓存改成1",
@@ -31,7 +39,8 @@
     },
     "Anti_Proxy_Path": {
       "description": "反代理的网站地址",
-      "value": "https://www.baidu.com"
+      "value": "https://www.baidu.com",
+      "required": false
     }
   },
   "website": "https://github.com/ki8852/v2ray-heroku-undone",
