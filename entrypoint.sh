@@ -1,18 +1,30 @@
-#! /bin/bash
+#! /bin/bash -v
 if [[ -z "${UUID}" ]]; then
   UUID="4890bd47-5180-4b1c-9a5d-3ef686543112"
+  echo "UUID未填,将采用默认UUID${UUID}"
 fi
 
 if [[ -z "${AlterID}" ]]; then
   AlterID="10"
+  echo "AlterID未填,将采用默认AlterID${AlterID}"
+fi
+
+if [[ "${V2_Path}" == '/' ]];then
+  V2_Path="/FreeApp"
+  echo "路径不能为根路径,将采用默认路径${V2_Path}"
 fi
 
 if [[ -z "${V2_Path}" ]]; then
   V2_Path="/FreeApp"
+  echo "V2路径未填,将采用默认路径${V2_Path}"
 fi
 
 if [[ -z "${V2_QR_Path}" ]]; then
   V2_QR_Code="1234"
+fi
+
+if [[ -z "${Anti_Proxy_Path}" ]]; then
+  Anti_Proxy_Path="https://www.baidu.com"
 fi
 
 rm -rf /etc/localtime
@@ -43,13 +55,13 @@ wget --no-check-certificate -qO 'caddy.tar.gz' "https://github.com/mholt/caddy/r
 tar xvf caddy.tar.gz
 rm -rf caddy.tar.gz
 chmod +x caddy
-cd /root
-mkdir /wwwroot
-cd /wwwroot
+# cd /root
+# mkdir /wwwroot
+# cd /wwwroot
 
-wget --no-check-certificate -qO 'demo.tar.gz' "https://github.com/ki8852/v2ray-heroku-undone/raw/master/demo.tar.gz"
-tar xvf demo.tar.gz
-rm -rf demo.tar.gz
+# wget --no-check-certificate -qO 'demo.tar.gz' "https://raw.githubusercontent.com/ki8852/v2ray-heroku-undone/master/demo.tar.gz"
+# tar xvf demo.tar.gz
+# rm -rf demo.tar.gz
 
 cat <<-EOF > /v2raybin/v2ray-$V_VER-linux-$SYS_Bit/config.json
 {
@@ -87,11 +99,13 @@ EOF
 cat <<-EOF > /caddybin/Caddyfile
 http://0.0.0.0:${PORT}
 {
-	root /wwwroot
-	index index.html
 	timeouts none
+  proxy / ${Anti_Proxy_Path} {
+    gzip
+  }
 	proxy ${V2_Path} localhost:2333 {
 		websocket
+    without ${V2_Path}
 		header_upstream -Origin
 	}
 }
