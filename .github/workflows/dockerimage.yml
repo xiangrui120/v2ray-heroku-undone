@@ -12,10 +12,10 @@ jobs:
     - uses: actions/checkout@v1
     - name: Build the Docker image
       run: |
-        export workName=V2Heroku-$(date +%s)
-        docker build . --file Dockerfile --tag $workName
+        export buildTime=$(date +%s)
+        docker build . --file Dockerfile --tag v2Heroku:$buildTime
     
     - name: Run the Docker image
       run: |
         export AppName=test
-        docker run $workName
+        docker run v2Heroku:$buildTime
