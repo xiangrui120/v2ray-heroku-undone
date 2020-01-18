@@ -11,9 +11,11 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:V2Heroku-$(date +%s)
+      run: |
+        export workName=V2Heroku-$(date +%s)
+        docker build . --file Dockerfile --tag $workName
     
     - name: Run the Docker image
       run: |
         export AppName=test
-        docker run
+        docker run $workName
