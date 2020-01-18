@@ -6,6 +6,6 @@ RUN apt update -y \
 	&& python3 -V \
 	&& pip3 install requests -U
 
-ADD entrypoint.sh /entrypoint.sh
-CMD chmod +x /entrypoint.sh
-ENTRYPOINT ["entrypoint.sh"]
+ADD worker /worker
+CMD cd /worker \
+	&& python3 /worker/main.py
