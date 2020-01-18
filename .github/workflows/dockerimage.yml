@@ -13,7 +13,7 @@ jobs:
     - name: Build the Docker image
       run: |
         export buildTime=$(date +%s)
-        docker build . --file Dockerfile --tag v2Heroku:$buildTime
+        docker build . --file Dockerfile --tag v2heroku:$buildTime
     
     - name: Run the Docker image
       run: |
