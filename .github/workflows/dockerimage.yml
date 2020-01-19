@@ -11,7 +11,8 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    
+    env:
+      AppName: build_test
 
     steps:
     - uses: actions/checkout@v1
