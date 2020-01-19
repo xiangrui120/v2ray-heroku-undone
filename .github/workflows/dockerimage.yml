@@ -1,6 +1,9 @@
 name: V2ray Heroku Docker Image
 
-on: [push]
+on: 
+  push:
+  schedule:
+    - cron: "0 0 * * 5"
 
 jobs:
 
@@ -13,9 +16,17 @@ jobs:
     - name: Build the Docker image
       run: |
         export buildTime=$(date +%s)
-        docker build . --file Dockerfile --tag v2heroku:$buildTime
+        docker build . --file Dockerfile --tag v2heroku:$GITHUB_SHA
     
+  run:
+
+    needs: build
+
+    env:
+      AppName: test
+    
+    steps:
     - name: Run the Docker image
       run: |
         export AppName=test
-        docker run --name=run_test v2heroku:$buildTime bash
+        docker run --name=run_test v2heroku:$GITHUB_SHA bash
