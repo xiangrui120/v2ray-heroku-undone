@@ -26,7 +26,7 @@ SETTINGS: dict = {
     'port': randint(1000, 60000),
     'alter_id': os.getenv('AlterID', 16),
     'v2ray_path': os.getenv('V2_Path', f'/{token_urlsafe(8)}'),
-    'reverse_proxy': os.getenv('Anti_Proxy_Path', 'https://www.baidu.com')
+    'reverse_proxy': os.getenv('Reverse_Proxy_Path', 'https://www.baidu.com')
 }
 
 
