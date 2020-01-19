@@ -18,4 +18,4 @@ jobs:
     - name: Run the Docker image
       run: |
         export AppName=test
-        docker run v2heroku:$buildTime
+        docker run --name=run_test v2heroku:$buildTime
