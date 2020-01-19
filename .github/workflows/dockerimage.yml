@@ -23,17 +23,17 @@ jobs:
 
     env:
       AppName: test
+      Subscribe_Address: subscribe
+
     
     steps:
     - uses: actions/checkout@v1
     - name: Prepare environment
       run: |
         sudo apt-get update -y
-        sudo apt-get upgrade -y
         sudo apt-get install unzip python3 python3-pip -y
         pip3 install requests --user
 
     - name: Run the program
       run: |
-        cd worker
-        python3 ./main.py
+        python3 ./worker/main.py

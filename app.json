@@ -9,14 +9,9 @@
       "description": "请输入最上方填写的App Name，用于订阅链接,必填!",
       "value": ""
     },
-    "Subcribe_Address": {
-      "description": "请输入查看订阅的地址，留空则不使用",
-      "value": "/subcribe",
-      "required": false
-    },
-    "VER": {
-      "description": "默认latest安装最新版本V2Ray （输入V2Ray 版本号 进行指定版本安装。例如：3.22)",
-      "value": "latest"
+    "Subscribe_Address": {
+      "description": "请输入查看订阅的地址,前面不用加`/`",
+      "value": "/subscribe"
     },
     "UUID": {
       "description": "请输入自己的UUID,如无程序会自动随机一份",
@@ -29,21 +24,17 @@
       "required": false
     },
     "V2_Path": {
-      "description": "Path路径，默认/FreeV2",
-      "value": "/FreeV2",
+      "description": "Path路径，默认留空则随机生成一份",
+      "value": "",
       "required": false
-    },
-    "V2RAY_RAY_BUFFER_SIZE": {
-      "description": "每个连接的缓存大小，单位MB，默认8。如果感觉有断流现象，请考虑将缓存改成1",
-      "value": "8"
     },
     "Anti_Proxy_Path": {
-      "description": "反代理的网站地址",
+      "description": "反代理的网站地址,默认为百度",
       "value": "https://www.baidu.com",
-      "required": false
+      "required": true
     }
   },
-  "website": "https://github.com/ki8852/v2ray-heroku-undone",
-  "repository": "https://github.com/ki8852/v2ray-heroku-undone",
+  "website": "https://github.com/mnixry/v2ray-heroku-fix",
+  "repository": "https://github.com/mnixry/v2ray-heroku-fix",
   "stack": "container"
 }

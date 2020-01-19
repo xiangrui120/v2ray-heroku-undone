@@ -7,5 +7,4 @@ RUN apt-get update -y \
 	&& pip3 install requests -U
 
 ADD worker /worker
-CMD cd /worker \
-	&& python3 /worker/main.py
+CMD python3 /worker/main.py
