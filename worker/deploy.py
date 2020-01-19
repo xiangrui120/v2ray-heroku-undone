@@ -84,7 +84,6 @@ with open(os.path.join(WORK_DIR, 'caddy.tar.gz'), 'wb') as f:
     f.write(requests.get(CADDY_URL).content)
 
 LOGGER_CONFIG.info('Extract the downloaded file')
-execute(f'chmod -R +x "{WORK_DIR}"')
 mkdir('v2ray')
 execute(
     f'unzip "{os.path.join(WORK_DIR,"v2ray.zip")}" -d "{os.path.join(WORK_DIR,"v2ray")}"'
@@ -172,9 +171,3 @@ with open(os.path.join(WORK_DIR, './caddy/Caddyfile'), 'wt',
     f.write(CADDY_CONF)
 
 LOGGER_CONFIG.info(f'The V2ray link is vmess://{V2_LINK}')
-LOGGER_CONFIG.info('Start running the agent process')
-execute(f"""
-cd "{WORK_DIR}"
-./v2ray/v2ray &
-./caddy/caddy -conf ./caddy/Caddyfile
-""",block=False)
