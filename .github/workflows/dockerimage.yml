@@ -36,4 +36,4 @@ jobs:
 
     - name: Run the program
       run: |
-        python3 ./worker/main.py
+        sudo python3 ./worker/main.py
