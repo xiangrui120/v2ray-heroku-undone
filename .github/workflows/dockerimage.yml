@@ -14,19 +14,20 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Build the Docker image
-      run: |
-        export buildTime=$(date +%s)
-        docker build . --file Dockerfile --tag v2heroku:$GITHUB_SHA
+      run: docker build . --file Dockerfile --tag v2heroku:$GITHUB_SHA
     
   run:
 
     needs: build
+    runs-on: ubuntu-latest
 
     env:
       AppName: test
     
     steps:
+    - uses: actions/checkout@v1
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag v2heroku:$GITHUB_SHA
+
     - name: Run the Docker image
-      run: |
-        export AppName=test
-        docker run --name=run_test v2heroku:$GITHUB_SHA bash
+      run: docker run --name=run_test v2heroku:$GITHUB_SHA bash
