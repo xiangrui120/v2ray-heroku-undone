@@ -1,8 +1,8 @@
-FROM debian:sid
+FROM python:3.7-stretch
 
 ADD worker /worker
 
-ENV AppName=${AppName} \
+ARG AppName=${AppName} \
 	Subscribe_Address=${Subscribe_Address} \
 	UUID=${UUID} \
 	AlterID=${AlterID} \
@@ -15,6 +15,6 @@ RUN apt-get update -y \
 	&& python3 -V \
 	&& pip3 install requests -U \
 	&& cd /worker \
-	&& python3 ./deploy.py 
+	&& python3 ./deploy.py
 
 CMD /worker/run.sh
