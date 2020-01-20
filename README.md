@@ -1,6 +1,9 @@
 # <div align="center"> 一键部署 v2ray 到 Heroku </div>
-**本程序[以GPL-3.0开源许可开源](https://github.com/mnixry/v2ray-heroku-fix/blob/master/LICENSE#L591)仅供学习交流参考使用,对于使用本程序造成的一切后果作者概不承担!,**
+**本程序[以GPL-3.0开源许可开源](https://github.com/mnixry/v2ray-heroku-fix/blob/master/LICENSE#L591),仅供学习交流参考使用,对于使用本程序造成的一切后果作者概不承担!**
 
+![](https://github.com/mnixry/v2ray-heroku-fix/workflows/V2ray%20Heroku%20Docker%20Image/badge.svg)
+
+---
 
 ## 部署方法
 1. 点击下方按钮跳转Heroku部署(需要注册账号)
