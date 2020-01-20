@@ -11,7 +11,7 @@ from uuid import uuid4
 
 import requests
 
-assert GetEnv('AppName')
+assert os.getenv('AppName')
 
 basicConfig(level=20)
 
