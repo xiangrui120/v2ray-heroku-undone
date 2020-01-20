@@ -7,9 +7,6 @@ RUN apt-get update -y \
 
 ADD worker /worker
 
-CMD chmod -R +x /worker
-
 CMD cd /worker \
 	&& python3 ./deploy.py \
-
-CMD bash ./run.sh
+	&& bash ./run.sh
