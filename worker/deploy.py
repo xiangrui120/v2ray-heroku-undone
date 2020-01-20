@@ -11,22 +11,29 @@ from uuid import uuid4
 
 import requests
 
-assert os.getenv('AppName')
+assert GetEnv('AppName')
 
 basicConfig(level=20)
+
+def GetEnv(key:str,default=None):
+    envGet = os.getenv(key)
+    if not envGet:
+        return default
+    else:
+        return envGet
 
 LOGGER = getLogger('worker')
 LOGGER_CONFIG = LOGGER.getChild('config')
 LOGGER_COMMAND = LOGGER.getChild('command')
 WORK_DIR = os.path.abspath(os.getcwd())
 SETTINGS: dict = {
-    'name': os.getenv('AppName'),
-    'subscribe_path': os.getenv('Subscribe_Address', token_urlsafe(16)),
-    'uuid': os.getenv('UUID', str(uuid4())),
+    'name': GetEnv('AppName'),
+    'subscribe_path': GetEnv('Subscribe_Address', token_urlsafe(16)),
+    'uuid': GetEnv('UUID', str(uuid4())),
     'port': randint(1000, 60000),
-    'alter_id': os.getenv('AlterID', 16),
-    'v2ray_path': os.getenv('V2_Path', f'/{token_urlsafe(8)}'),
-    'reverse_proxy': os.getenv('Anti_Proxy_Path', 'https://www.baidu.com')
+    'alter_id': GetEnv('AlterID', 16),
+    'v2ray_path': GetEnv('V2_Path', f'/{token_urlsafe(8)}'),
+    'reverse_proxy': GetEnv('Anti_Proxy_Path', 'https://www.baidu.com')
 }
 
 
@@ -147,7 +154,7 @@ with open(os.path.join(WORK_DIR, 'subscribe', 'index.html'),
           encoding='utf-8') as f:
     f.write(f'vmess://{V2_LINK}')
 
-CADDY_CONF = f""":{os.getenv('PORT',80)} {{
+CADDY_CONF = f""":{GetEnv('PORT',80)} {{
     gzip
     log stdout
     timeouts none
@@ -162,7 +169,7 @@ CADDY_CONF = f""":{os.getenv('PORT',80)} {{
     }}
 
 }}
-:{os.getenv('PORT',80)}/{SETTINGS['subscribe_path']} {{
+:{GetEnv('PORT',80)}/{SETTINGS['subscribe_path']} {{
     gzip
     log stdout
     root "{os.path.join(WORK_DIR,'subscribe')}"
