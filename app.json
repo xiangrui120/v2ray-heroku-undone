@@ -11,7 +11,7 @@
     },
     "Subscribe_Address": {
       "description": "请输入查看订阅的地址,前面不用加`/`",
-      "value": "/subscribe"
+      "value": "subscribe"
     },
     "UUID": {
       "description": "请输入自己的UUID,如无程序会自动随机一份",
