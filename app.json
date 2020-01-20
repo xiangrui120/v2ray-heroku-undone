@@ -28,7 +28,7 @@
       "value": "",
       "required": false
     },
-    "Reverse_Proxy_Path": {
+    "Anti_Proxy_Path": {
       "description": "反代理的网站地址,默认为百度",
       "value": "https://www.baidu.com",
       "required": true

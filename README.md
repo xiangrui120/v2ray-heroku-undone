@@ -10,6 +10,10 @@
 
 3. 服务端部署后，点 `open app`,能正常显示反代理的网页,地址补上V2ray路径后访问显示`Bad Request`,表示部署成功。
 
+4. 更新 v2ray 版本
+    - 访问 https://dashboard.heroku.com/apps 选择部署好v2ray的app
+    - 直接选择`More` --> `Restart all dynos`
+
 ## 参考链接:
 > [V2ray-Core](https://github.com/v2ray/v2ray-core)
 
