@@ -34,4 +34,5 @@ jobs:
 
     - name: Run the program
       run: |
-        sudo -E python3 ./worker/main.py
+        cd ./worker
+        sudo -E python3 ./main.py

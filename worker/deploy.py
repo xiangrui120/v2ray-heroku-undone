@@ -171,9 +171,3 @@ with open(os.path.join(WORK_DIR, './caddy/Caddyfile'), 'wt',
     f.write(CADDY_CONF)
 
 LOGGER_CONFIG.info(f'The V2ray link is vmess://{V2_LINK}')
-LOGGER_CONFIG.info('Start running the agent process')
-execute(f"""
-cd "{WORK_DIR}"
-./v2ray/v2ray &
-./caddy/caddy -conf ./caddy/Caddyfile
-""",block=False)

@@ -9,4 +9,7 @@ ADD worker /worker
 
 CMD chmod -R +x /worker
 
-CMD python3 /worker/main.py
+CMD cd /worker \
+	&& python3 ./deploy.py \
+
+CMD bash ./run.sh
