@@ -147,25 +147,26 @@ with open(os.path.join(WORK_DIR, 'subscribe', 'index.html'),
           encoding='utf-8') as f:
     f.write(f'vmess://{V2_LINK}')
 
-CADDY_CONF = f"""
-:{os.getenv('PORT',80)} {{
+CADDY_CONF = f""":{os.getenv('PORT',80)} {{
     gzip
     log stdout
     timeouts none
+
     proxy / {SETTINGS['reverse_proxy']} {{
         except /{SETTINGS['subscribe_path']}
     }}
+
     proxy {SETTINGS['v2ray_path']} 127.0.0.1:{SETTINGS['port']} {{
         websocket
         header_upstream -Origin
     }}
+
 }}
 :{os.getenv('PORT',80)}/{SETTINGS['subscribe_path']} {{
     gzip
     log stdout
     root "{os.path.join(WORK_DIR,'subscribe')}"
-}}
-"""
+}}"""
 with open(os.path.join(WORK_DIR, './caddy/Caddyfile'), 'wt',
           encoding='utf-8') as f:
     f.write(CADDY_CONF)
