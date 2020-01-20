@@ -28,11 +28,10 @@ jobs:
     - uses: actions/checkout@v1
     - name: Prepare environment
       run: |
-        sudo su --preserve-environment
-        apt-get update -y
-        apt-get install unzip python3 python3-pip -y
-        pip3 install requests
+        sudo apt-get update -y
+        sudo apt-get install unzip python3 python3-pip -y
+        sudo pip3 install requests
 
     - name: Run the program
       run: |
-        python3 ./worker/main.py
+        sudo -E python3 ./worker/main.py
