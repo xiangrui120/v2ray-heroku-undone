@@ -35,4 +35,4 @@ jobs:
     - name: Run the program
       run: |
         cd ./worker
-        sudo -E python3 ./main.py
+        sudo -E python3 ./deploy.py
