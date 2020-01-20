@@ -21,14 +21,18 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
 
+    env:
+      AppName: test
+
     steps:
     - uses: actions/checkout@v1
     - name: Prepare environment
       run: |
-        sudo apt-get update -y
-        sudo apt-get install unzip python3 python3-pip -y
-        sudo pip3 install requests
+        sudo su --preserve-environment
+        apt-get update -y
+        apt-get install unzip python3 python3-pip -y
+        pip3 install requests
 
     - name: Run the program
       run: |
-        sudo export AppName=test && python3 ./worker/main.py
+        python3 ./worker/main.py
