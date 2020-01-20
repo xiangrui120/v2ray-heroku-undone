@@ -113,7 +113,7 @@ V2_CONF = {
             "clients": [{
                 "id": SETTINGS['uuid'],
                 "level": 1,
-                "alterId": SETTINGS['alter_id']
+                "alterId": int(SETTINGS['alter_id'])
             }]
         },
         "streamSettings": {
