@@ -5,6 +5,13 @@
 
 ---
 
+## 停止维护
+
+**由于Heroku的用户协议禁止作为代理使用，本项目停止更新**
+
+**正在研究采用kubesail提供的服务实现类似功能**
+
+
 ## 部署方法
 1. 点击下方按钮跳转Heroku部署(需要注册账号)
     - [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://dashboard.heroku.com/new?template=https://github.com/mnixry/v2ray-heroku-fix)
